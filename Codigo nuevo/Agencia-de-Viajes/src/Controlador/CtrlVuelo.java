@@ -61,52 +61,64 @@ public class CtrlVuelo implements ActionListener {
 
 
   /**
-   * BOTONES frmCliente --- llamando a los metodos en ConsultasClientes
+   * BOTONES frmReserva
    * @param e
+   * se han creado métodos auxiliares para verificar los campos incompletos 
+   * y se han extraído las acciones de guardar y actualizar en métodos separados. 
    */
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Guardar Cliente 
         if (e.getSource() == frmV.btnGuardar) {
-
-            if (frmV.txtOrigen.getText().isEmpty() || frmV.txtDestino.getText().isEmpty() || frmV.txtEscala.getText().isEmpty()) {
+            if (areVueloFieldsIncomplete()) {
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos antes de guardar.");
             } else {
-                mod.setNombreAerolinea((String) frmV.txtaerolinea.getSelectedItem());
-                mod.setOrigen(frmV.txtOrigen.getText());
-                mod.setDestino(frmV.txtDestino.getText());
-                mod.setEscala(frmV.txtEscala.getText());
-                mod.setDisponibilidad((String) frmV.txtDisponibilidad.getSelectedItem());
-
-                try {
-                    if (modV.registrar(mod)) {
-                        JOptionPane.showMessageDialog(null, "Registro Guardado");
-                        limpiar();
-                        Listar();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error al Guardar");
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error al guardar los datos: " + ex.getMessage());
-                }
+                guardarVuelo();
             }
         }
 
         if (e.getSource() == frmMod.btnActualizar) {
-            mod.setIdVuelo(Integer.parseInt(frmMod.txtIdVuelo.getText()));
-            mod.setNombreAerolinea(frmMod.txtAerolinea.getText());
-            mod.setOrigen(frmMod.txtOrigen.getText());
-            mod.setDestino(frmMod.txtDestino.getText());
-            mod.setEscala(frmMod.txtEscala.getText());
-            mod.setDisponibilidad(frmMod.txtDisponibilidad.getText());
+            actualizarVuelo();
+        }
+    }
 
-            if (modV.modificar(mod)) {
-                JOptionPane.showMessageDialog(null, "Registro Actualizado");
-                frmMod.setVisible(false);
+    private boolean areVueloFieldsIncomplete() {
+        return frmV.txtOrigen.getText().isEmpty() || frmV.txtDestino.getText().isEmpty() || frmV.txtEscala.getText().isEmpty();
+    }
+
+    private void guardarVuelo() {
+        mod.setNombreAerolinea((String) frmV.txtaerolinea.getSelectedItem());
+        mod.setOrigen(frmV.txtOrigen.getText());
+        mod.setDestino(frmV.txtDestino.getText());
+        mod.setEscala(frmV.txtEscala.getText());
+        mod.setDisponibilidad((String) frmV.txtDisponibilidad.getSelectedItem());
+
+        try {
+            if (modV.registrar(mod)) {
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
+                limpiar();
                 Listar();
             } else {
-                JOptionPane.showMessageDialog(null, "Error al actualizar");
+                JOptionPane.showMessageDialog(null, "Error al Guardar");
             }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al guardar los datos: " + ex.getMessage());
+        }
+    }
+
+    private void actualizarVuelo() {
+        mod.setIdVuelo(Integer.parseInt(frmMod.txtIdVuelo.getText()));
+        mod.setNombreAerolinea(frmMod.txtAerolinea.getText());
+        mod.setOrigen(frmMod.txtOrigen.getText());
+        mod.setDestino(frmMod.txtDestino.getText());
+        mod.setEscala(frmMod.txtEscala.getText());
+        mod.setDisponibilidad(frmMod.txtDisponibilidad.getText());
+
+        if (modV.modificar(mod)) {
+            JOptionPane.showMessageDialog(null, "Registro Actualizado");
+            frmMod.setVisible(false);
+            Listar();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al actualizar");
         }
     }
 

@@ -38,27 +38,21 @@ public class CtrlLogin implements ActionListener {
         frml.setLocationRelativeTo(null);
     }
 
-    //Validacion de usuario, muestra de mensaje
-
   /**
-   *
+   * Validacion de usuario, muestra de mensaje
    * @param evt
    */
     @Override
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         if (evt.getSource() == frml.btnEntrar) {
-            String usuario;
-          usuario = frml.txtUsuario.getText();
-          String clave;
-          clave = frml.txtContraseña.getText();
+            String usuario = frml.txtUsuario.getText();
+            String clave = frml.txtContraseña.getText();
 
             try {
                 if (usuario.isEmpty() || clave.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Llene los dos campos");
                 } else {
-                    // Validar usuario
-                  boolean valido;
-                  valido = clo.validarUsuario(usuario, clave);
+                    boolean valido = clo.validarUsuario(usuario, clave);
                     if (valido) {
                         frml.mostrarMensaje("Bienvenido " + usuario + "!");
                         frml.cerrarVentana();
@@ -71,6 +65,4 @@ public class CtrlLogin implements ActionListener {
             }
         }
     }
-       
-
 }

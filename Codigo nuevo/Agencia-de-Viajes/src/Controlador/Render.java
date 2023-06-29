@@ -7,13 +7,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- *
+ * mostrar los botones correctamente en la tabla
  * @author hp
  */
 public class Render extends DefaultTableCellRenderer{
 
   /**
-   *
+   * 
    * @param table
    * @param value
    * @param isSelected

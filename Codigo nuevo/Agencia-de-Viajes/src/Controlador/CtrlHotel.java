@@ -57,46 +57,52 @@ public class CtrlHotel implements ActionListener {
    */
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Guardar Hotel
         if (e.getSource() == frmH.btnGuardar) {
-            mod.setNombre(frmH.txtNombre.getText());
-            mod.setUbicacion(frmH.txtUbicacion.getText());
-            mod.setTelefono(frmH.txtTelefono.getText());
-            mod.setDisponibilidad((String) frmH.txtDisponibilidad.getSelectedItem());
-            mod.setServicios(frmH.txtServicios.getText());
-            String telefono = frmH.txtTelefono.getText().trim();
-            try {
-                // Verificar si alguno de los campos de texto está vacío
-                if (validarCedulatelefono(telefono)) {
-                    if (modH.registrar(mod)) {
-                        JOptionPane.showMessageDialog(null, "Registro Guardado");
-                        limpiar();
-                        Listar();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error al Guardar");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Revise si los datos ingresados son correctos");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error al guardar los datos: " + ex.getMessage());
-            }
+            guardarHotel();
         }
         if (e.getSource() == frmMod.btnActualizar) {
-            mod.setIdHotel(Integer.parseInt(frmMod.txtIdHotel.getText()));
-            mod.setNombre(frmMod.txtNombre.getText());
-            mod.setUbicacion(frmMod.txtUbicacion.getText());
-            mod.setTelefono(frmMod.txtTelefono.getText());
-            mod.setDisponibilidad(frmMod.txtDisponibilidad.getText());
-            mod.setServicios(frmMod.txtServicios.getText());
+            actualizarHotel();
+        }
+    }
+    private void guardarHotel() {
+        mod.setNombre(frmH.txtNombre.getText());
+        mod.setUbicacion(frmH.txtUbicacion.getText());
+        mod.setTelefono(frmH.txtTelefono.getText());
+        mod.setDisponibilidad((String) frmH.txtDisponibilidad.getSelectedItem());
+        mod.setServicios(frmH.txtServicios.getText());
+        String telefono = frmH.txtTelefono.getText().trim();
 
-            if (modH.modificar(mod)) {
-                JOptionPane.showMessageDialog(null, "Registro Actualizado");
-                frmMod.setVisible(false);
-                Listar();
+        try {
+            if (validarCedulatelefono(telefono)) {
+                if (modH.registrar(mod)) {
+                    JOptionPane.showMessageDialog(null, "Registro Guardado");
+                    limpiar();
+                    Listar();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al Guardar");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Error al actualizar");
+                JOptionPane.showMessageDialog(null, "Revise si los datos ingresados son correctos");
             }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al guardar los datos: " + ex.getMessage());
+        }
+    }
+
+    private void actualizarHotel() {
+        mod.setIdHotel(Integer.parseInt(frmMod.txtIdHotel.getText()));
+        mod.setNombre(frmMod.txtNombre.getText());
+        mod.setUbicacion(frmMod.txtUbicacion.getText());
+        mod.setTelefono(frmMod.txtTelefono.getText());
+        mod.setDisponibilidad(frmMod.txtDisponibilidad.getText());
+        mod.setServicios(frmMod.txtServicios.getText());
+
+        if (modH.modificar(mod)) {
+            JOptionPane.showMessageDialog(null, "Registro Actualizado");
+            frmMod.setVisible(false);
+            Listar();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al actualizar");
         }
     }
 

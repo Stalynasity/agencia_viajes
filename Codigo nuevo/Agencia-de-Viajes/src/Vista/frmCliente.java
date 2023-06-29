@@ -3,7 +3,6 @@ package Vista;
 import Controlador.*;
 import Modelo.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import javax.swing.JButton;
@@ -288,18 +287,12 @@ public class frmCliente extends javax.swing.JFrame {
         int maxLength = 30;
 
         switch (buscar_box) {
-            case "Seleccione" ->
-                vacio(evt, txt, maxLength); // Limpiar el valor del campo de entrada
-            case "Cedula" ->
-                cedulaInput(evt, txt, maxLength);
-            case "Nombre" ->
-                textInput(evt, txt, maxLength);
-            case "Apellido" ->
-                textInput(evt, txt, maxLength);
-            case "Direccion" ->
-                textInput(evt, txt, 80);
-            default ->
-                System.out.println("Error");
+            case "Seleccione" ->    vacio(evt, txt, maxLength); // Limpiar el valor del campo de entrada
+            case "Cedula" ->    cedulaInput(evt, txt, maxLength);
+            case "Nombre" ->    textInput(evt, txt, maxLength);
+            case "Apellido" ->  textInput(evt, txt, maxLength);
+            case "Direccion" -> textInput(evt, txt, 80);
+            default ->          System.out.println("Error");
         }
 
         if (txtBusqueda.getText().length() >= maxLength) {

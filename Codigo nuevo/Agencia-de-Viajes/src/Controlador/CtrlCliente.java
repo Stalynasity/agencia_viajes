@@ -66,63 +66,77 @@ public class CtrlCliente implements ActionListener {
   /**
    * BOTONES frmCliente --- llamando a los metodos en ConsultasClientes
    * @param e
+   * se han extraído las secciones de código para guardar un cliente y actualizar un cliente en dos métodos separados: 
+   * guardarCliente() y actualizarCliente(). Esto mejora la legibilidad y el mantenimiento del código, 
+   * ya que cada método se encarga de una funcionalidad específica.
    */
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Guardar Cliente 
         if (e.getSource() == frmC.btnGuardar) {
-            mod.setCedula(frmC.txtCedula.getText());
-            mod.setNombres(frmC.txtNombres.getText());
-            mod.setApellidos(frmC.txtApellidos.getText());
-            mod.setTelefono(frmC.txtTelefono.getText());
-            mod.setDireccion(frmC.txtDireccion.getText());
-            mod.setEmail(frmC.txtEmail.getText());
-            String email = frmC.txtEmail.getText().trim();
-            String cedula = frmC.txtCedula.getText().trim();
-            String telefono = frmC.txtTelefono.getText().trim();
-            try {
-                if (isValidEmail(email) && validarCedulatelefono(cedula) && validarCedulatelefono(telefono)) {
-                    if (modC.registrar(mod)) {
-                        JOptionPane.showMessageDialog(null, "Registro Guardado");
-                        limpiar();
-                        Listar();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error al Guardar");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Revise si los datos ingresados son correctos");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if (guardarCliente()) {
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
+                limpiar();
+                Listar();
             }
         }
-
         if (e.getSource() == frmMod.btnActualizar) {
-            mod.setIdCliente(Integer.parseInt(frmMod.txtIdCliente.getText()));
-            mod.setCedula(frmMod.txtCedula.getText());
-            mod.setNombres(frmMod.txtNombres.getText());
-            mod.setApellidos(frmMod.txtApellidos.getText());
-            mod.setTelefono(frmMod.txtTelefono.getText());
-            mod.setDireccion(frmMod.txtDireccion.getText());
-            mod.setEmail(frmMod.txtEmail.getText());
-            String email = frmMod.txtEmail.getText().trim();
-            String telefono = frmMod.txtTelefono.getText().trim();
-            try {
-                if (isValidEmail(email) && validarCedulatelefono(telefono)) {
-                    if (modC.modificar(mod)) {
-                        JOptionPane.showMessageDialog(null, "Registro Actualizado");
-                        frmMod.setVisible(false);
-                        Listar();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error al actualizar");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Revise si los datos ingresados son correctos");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if (actualizarCliente()) {
+                JOptionPane.showMessageDialog(null, "Registro Actualizado");
+                frmMod.setVisible(false);
+                Listar();
             }
         }
+    }
+    private boolean guardarCliente() {
+        mod.setCedula(frmC.txtCedula.getText());
+        mod.setNombres(frmC.txtNombres.getText());
+        mod.setApellidos(frmC.txtApellidos.getText());
+        mod.setTelefono(frmC.txtTelefono.getText());
+        mod.setDireccion(frmC.txtDireccion.getText());
+        mod.setEmail(frmC.txtEmail.getText());
+        String email = frmC.txtEmail.getText().trim();
+        String cedula = frmC.txtCedula.getText().trim();
+        String telefono = frmC.txtTelefono.getText().trim();
+        try {
+            if (isValidEmail(email) && validarCedulatelefono(cedula) && validarCedulatelefono(telefono)) {
+                if (modC.registrar(mod)) {
+                    return true;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al Guardar");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Revise si los datos ingresados son correctos");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
+    }
+
+    private boolean actualizarCliente() {
+        mod.setIdCliente(Integer.parseInt(frmMod.txtIdCliente.getText()));
+        mod.setCedula(frmMod.txtCedula.getText());
+        mod.setNombres(frmMod.txtNombres.getText());
+        mod.setApellidos(frmMod.txtApellidos.getText());
+        mod.setTelefono(frmMod.txtTelefono.getText());
+        mod.setDireccion(frmMod.txtDireccion.getText());
+        mod.setEmail(frmMod.txtEmail.getText());
+        String email = frmMod.txtEmail.getText().trim();
+        String telefono = frmMod.txtTelefono.getText().trim();
+        try {
+            if (isValidEmail(email) && validarCedulatelefono(telefono)) {
+                if (modC.modificar(mod)) {
+                    return true;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al actualizar");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Revise si los datos ingresados son correctos");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
     }
   /**
    * accion de limpiar formulario

@@ -81,35 +81,30 @@ public class CtrlReservas implements ActionListener {
     }
 
   /**
-   *
+   * se han extraído los bloques de código relacionados a la validación de campos vacíos 
+   * y fechas a métodos separados para mejorar la legibilidad y reutilización del código. 
    * @param e
    */
-  @Override
+    @Override
     public void actionPerformed(ActionEvent e) {
-
-        //Validaciones campos vacios y fechas
         if (e.getSource() == frmR.btnReservar) {
-            if (frmR.dateFechaInicio.getDate() == null || frmR.dateFechaFin.getDate() == null || frmR.combohoteles.getSelectedItem()=="Seleccione" || frmR.txtHabitaciones.getText().isEmpty() || frmR.txtPersonas.getText().isEmpty() || frmR.txtCliente.getText().isEmpty() || frmR.txtcedula.getText().isEmpty() || frmR.txtPreciototal.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos antes de Reservar.");
-            } else if (!validarFecha(frmR.dateFechaInicio.getDate()) || !validarFecha(frmR.dateFechaFin.getDate())) {
-                JOptionPane.showMessageDialog(null, "La fecha no puede ser anterior a hoy.");
+            if (camposVacios() || !validarFechas()) {
+                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos correctamente antes de Reservar.");
             } else {
-                //código para guardar la reserva
-
-                r.setFechaInicio(frmR.dateFechaInicio.getDate());
-                r.setFechaFin(frmR.dateFechaFin.getDate());
-                r.setHotel((String) frmR.combohoteles.getSelectedItem());
-                r.setHabitaciones(Integer.parseInt(frmR.txtHabitaciones.getText()));
-                r.setPersonas(Integer.parseInt(frmR.txtPersonas.getText()));
-                r.setCliente(frmR.txtCliente.getText());
-                r.setCedula(frmR.txtcedula.getText());
-                r.setPrecioTotal(Double.parseDouble(frmR.txtPreciototal.getText()));
-                r.setEstado((String) frmR.txtEstado.getSelectedItem());
-
                 try {
+                    r.setFechaInicio(frmR.dateFechaInicio.getDate());
+                    r.setFechaFin(frmR.dateFechaFin.getDate());
+                    r.setHotel((String) frmR.combohoteles.getSelectedItem());
+                    r.setHabitaciones(Integer.parseInt(frmR.txtHabitaciones.getText()));
+                    r.setPersonas(Integer.parseInt(frmR.txtPersonas.getText()));
+                    r.setCliente(frmR.txtCliente.getText());
+                    r.setCedula(frmR.txtcedula.getText());
+                    r.setPrecioTotal(Double.parseDouble(frmR.txtPreciototal.getText()));
+                    r.setEstado((String) frmR.txtEstado.getSelectedItem());
+
                     if (validarCedulatelefono(r.getCedula())) {
                         if (cr.registrar(r)) {
-                            JOptionPane.showMessageDialog(null, "Reserva Realizada ,Tenga un buen día!");
+                            JOptionPane.showMessageDialog(null, "Reserva Realizada. ¡Tenga un buen día!");
                             limpiar();
                             Listar();
                         } else {
@@ -125,14 +120,8 @@ public class CtrlReservas implements ActionListener {
         }
 
         if (e.getSource() == frmMR.btnActualizar) {
-            if (!verificarCamposCompletos(new JTextField[]{frmMR.txtIdReserva, frmMR.txtHabitaciones,
-                frmMR.txtPersonas, frmMR.txtCliente, frmMR.txtcedula,
-                frmMR.txtPreciototal, frmMR.txtEstado})
-                    || frmMR.dateFechaInicio.getDate() == null ||frmMR.combohoteles.getSelectedItem()=="Sleccione"|| frmMR.dateFechaFin.getDate() == null) {
-
+            if (camposCompletos() || !validarFechas()) {
                 JOptionPane.showMessageDialog(null, "Por favor complete todos los campos antes de Reservar.");
-            } else if (!validarFecha(frmMR.dateFechaInicio.getDate()) || !validarFecha(frmMR.dateFechaFin.getDate())) {
-                JOptionPane.showMessageDialog(null, "La fecha no puede ser anterior a hoy.");
             } else {
                 try {
                     r.setIdReserva(Integer.parseInt(frmMR.txtIdReserva.getText()));
@@ -149,7 +138,7 @@ public class CtrlReservas implements ActionListener {
                     if (cr.modificar(r)) {
                         JOptionPane.showMessageDialog(null, "Reserva Actualizada");
                         frmMR.setVisible(false);
-                       Listar();
+                        Listar();
                     } else {
                         JOptionPane.showMessageDialog(null, "Error al actualizar");
                     }
@@ -158,12 +147,34 @@ public class CtrlReservas implements ActionListener {
                         throw new ValorNoNumericoException();
                     } catch (ValorNoNumericoException ex1) {
                         JOptionPane.showMessageDialog(null, "Error");
-
                     }
                 }
             }
         }
+    }
 
+    private boolean camposVacios() {
+        return frmR.dateFechaInicio.getDate() == null ||
+                frmR.dateFechaFin.getDate() == null ||
+                frmR.combohoteles.getSelectedItem().equals("Seleccione") ||
+                frmR.txtHabitaciones.getText().isEmpty() ||
+                frmR.txtPersonas.getText().isEmpty() ||
+                frmR.txtCliente.getText().isEmpty() ||
+                frmR.txtcedula.getText().isEmpty() ||
+                frmR.txtPreciototal.getText().isEmpty();
+    }
+
+    private boolean camposCompletos() {
+        return verificarCamposCompletos(new JTextField[]{frmMR.txtIdReserva, frmMR.txtHabitaciones,
+                frmMR.txtPersonas, frmMR.txtCliente, frmMR.txtcedula,
+                frmMR.txtPreciototal, frmMR.txtEstado}) ||
+                frmMR.dateFechaInicio.getDate() == null ||
+                frmMR.dateFechaFin.getDate() == null ||
+                frmMR.combohoteles.getSelectedItem().equals("Sleccione");
+    }
+
+    private boolean validarFechas() {
+        return validarFecha(frmR.dateFechaInicio.getDate()) && validarFecha(frmR.dateFechaFin.getDate());
     }
 
   /**
