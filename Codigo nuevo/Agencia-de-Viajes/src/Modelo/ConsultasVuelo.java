@@ -1,32 +1,25 @@
 package Modelo;
 
-
 import java.sql.*;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
 /**
  *
- * @author Grupo E
+ * @author staly
  */
 public class ConsultasVuelo extends Conexion {
     
-    //METODO REGISTRAR CLIENTE
-
   /**
-   *
+   * METODO REGISTRAR CLIENTE
    * @param v
    * @return
    */
     public boolean registrar(Vuelo v) {
 
-        CallableStatement ps = null;
-        Connection con = getConnection();
-
         String sql = "{CALL REGISTRAR_VUELO(INCREMENTADOIDVUELO.NEXTVAL,?,?,?,?,?)}";//Insertando datos en la tabla VUELO
-
-        try {
-            ps = (CallableStatement) con.prepareCall(sql);
+        try (Connection con = getConnection();
+            CallableStatement ps = con.prepareCall(sql)){
             ps.setString(1, v.getNombreAerolinea());
             ps.setString(2, v.getOrigen());
             ps.setString(3, v.getDestino());
@@ -34,37 +27,22 @@ public class ConsultasVuelo extends Conexion {
             ps.setString(5, v.getDisponibilidad());
             ps.execute();
             return true;
-
         } catch (SQLException e) {
             System.out.println(e);
-            return false;
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println(e);
-                return false;
-            }
         }
+        return false;
     }
-    
-    //METODO MODIFICAR CLIENTE
-
+   
   /**
-   *
+   * METODO MODIFICAR CLIENTE
    * @param v
    * @return
    */
      public boolean modificar(Vuelo v) {
-
-        CallableStatement ps = null;
-        Connection con = getConnection();
-
+       
         String sql = "{CALL ACTUALIZAR_VUELO(?,?,?,?,?,?)}";
-   
-        try {
-            
-            ps = con.prepareCall(sql);
+        try (Connection con = getConnection();
+            CallableStatement ps = con.prepareCall(sql)){
             ps.setInt(1, v.getIdVuelo());
             ps.setString(2, v.getNombreAerolinea());
             ps.setString(3, v.getOrigen());
@@ -78,66 +56,43 @@ public class ConsultasVuelo extends Conexion {
 
         } catch (SQLException e) {
             System.out.println(e);
-            return false;
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println(e);
-                return false;
-            }
-        }
+        } return false;
     }
        
 
   /**
-   * METODO LISTAR CLIENTES
+   * METODO LISTAR vuelo
    * @param consulta
    * @return
    */
     public static ResultSet ListarTabla(String consulta){
-        Statement sql;
-        ResultSet rs=null;
-        Connection con = getConnection();
         try {
-            sql=con.createStatement();
-            rs=sql.executeQuery(consulta);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return rs;
+        Connection con = getConnection();
+        Statement sql = con.createStatement();
+        return sql.executeQuery(consulta);
+    } catch (SQLException e) {
+        System.out.println(e);
     }
+    return null;
+}
     
-     //METODO ELIMINAR CLIENTE
-
   /**
-   *
+   * METODO ELIMINAR vuelo
    * @param id
    * @return
    */
     public static boolean Eliminar(String id) {
         int idH=Integer.parseInt(id);
-        CallableStatement ps = null;
-        Connection con = getConnection();
-
         String sql = "{CALL ELIMINAR_VUELO(?)}";
 
-        try {
-            ps = con.prepareCall(sql);
+        try (Connection con = getConnection();
+            CallableStatement ps = con.prepareCall(sql)){
              ps.setInt(1, idH);
-            
-            
             ps.execute();
-            con.close();
             return true;
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            
-            return false;
-       
+           return false;
         }
     }
-    
-    
 }

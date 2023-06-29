@@ -15,35 +15,21 @@ public class ConsultasLogin {
    * @param clave
    * @return
    * @throws SQLException
+   * Se elimina la variable valido y se retorna directamente el resultado de la comparación resultado == 1.
+   * No es necesario cerrar explícitamente los objetos ps y con en el bloque finally cuando se utilizan en un bloque try-with-resources.
    */
   public boolean validarUsuario(String usuario, String clave) throws SQLException {
-        CallableStatement ps = null;
-        Connection con = getConnection();
-        
-    boolean valido = false;
+      String sql = "{ call VALIDAR_USUARIO(?,?,?) }";
+      try (Connection con = getConnection();
+           CallableStatement ps = con.prepareCall(sql)) {
 
-    try {
+          ps.setString(1, usuario);
+          ps.setString(2, clave);
+          ps.registerOutParameter(3, Types.NUMERIC);
+          ps.execute();
+          int resultado = ps.getInt(3);
 
-        ps = con.prepareCall("{ call VALIDAR_USUARIO(?,?,?) }");
-        ps.setString(1, usuario);
-        ps.setString(2, clave);
-        ps.registerOutParameter(3, Types.NUMERIC);
-        ps.execute();
-        int resultado = ps.getInt(3);
-
-        if (resultado == 1) {
-            valido = true;
-        }
-    } finally {
-        if (ps != null) {
-            ps.close();
-        }
-        if (con != null) {
-            con.close();
-        }
+          return resultado == 1;
+      }
     }
-
-    return valido;
-}
-
 }

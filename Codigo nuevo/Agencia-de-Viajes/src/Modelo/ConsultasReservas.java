@@ -25,13 +25,9 @@ public class ConsultasReservas {
    */
     public boolean registrar(Reserva r) {
 
-        CallableStatement ps = null;
-        Connection con = getConnection();
-
         String sql = "{CALL REGISTRAR_RESERVA(UNO.NEXTVAL,?,?,?,?,?,?,?,?,?)}";//Insertando datos en la tabla CLIENTE
-
-        try {
-            ps = (CallableStatement) con.prepareCall(sql);
+        try (Connection con = getConnection();
+            CallableStatement ps = con.prepareCall(sql)){
             ps.setDate(1, new java.sql.Date(r.getFechaInicio().getTime()));
             ps.setDate(2, new java.sql.Date(r.getFechaFin().getTime()));
             ps.setString(3, r.getCliente());
@@ -41,40 +37,23 @@ public class ConsultasReservas {
             ps.setInt(7, r.getPersonas());
             ps.setDouble(8, r.getPrecioTotal());
             ps.setString(9, r.getEstado());
-
             ps.execute();
             return true;
-
         } catch (SQLException e) {
             System.out.println(e);
-            return false;
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println(e);
-                return false;
-            }
         }
+        return false;
     }
 
-    //METODO MODIFICAR RESERVA
-
   /**
-   *
+   * METODO MODIFICAR RESERVA
    * @param r
    * @return
    */
     public boolean modificar(Reserva r) {
-
-        CallableStatement ps = null;
-        Connection con = getConnection();
-
         String sql = "{CALL ACTUALIZAR_RESERVA(?,?,?,?,?,?,?,?,?,?)}";
-
-        try {
-
-            ps = con.prepareCall(sql);
+        try (Connection con = getConnection();
+            CallableStatement ps = con.prepareCall(sql)){
             ps.setInt(1, r.getIdReserva());
             ps.setDate(2, new java.sql.Date(r.getFechaInicio().getTime()));
             ps.setDate(3, new java.sql.Date(r.getFechaFin().getTime()));
@@ -89,18 +68,10 @@ public class ConsultasReservas {
             ps.executeUpdate();
             con.close();
             return true;
-
         } catch (SQLException e) {
             System.out.println(e);
-            return false;
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println(e);
-                return false;
-            }
         }
+        return false;
     }
 
   /**
@@ -110,72 +81,58 @@ public class ConsultasReservas {
    */
   public static boolean Eliminar(String id) {
         int idR = Integer.parseInt(id);
-        CallableStatement ps = null;
-        Connection con = getConnection();
-
         String sql = "{CALL ELIMINAR_RESERVA(?)}";
-
-        try {
-            ps = con.prepareCall(sql);
+        try (Connection con = getConnection();
+            CallableStatement ps = con.prepareCall(sql)){
             ps.setInt(1, idR);
             ps.execute();
-            con.close();
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-
             return false;
-
         }
     }
 
   /**
-   *
+   * Nombres de los hoteles
    * @return
-   */
+   * Se eliminó el bloque try anidado innecesario y se utilizó un solo bloque try para manejar la conexión, 
+   * la llamada al procedimiento almacenado y el resultado del cursor.
+   */ 
   public DefaultComboBoxModel obtenerNombresHoteles() {
-        DefaultComboBoxModel ListadoHoteles = new DefaultComboBoxModel();
-        ListadoHoteles.addElement("Seleccione");
-        try {
-          try (Connection con = getConnection(); 
-              CallableStatement stmt = con.prepareCall("{call SP_OBTENER_HOTELES_DISPONIBLES(?)}")) 
-          {
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
-            try (
-                //Obtener los resultados del cursor
-                ResultSet rs = (ResultSet) stmt.getObject(1)) {
-              while (rs.next()) {
-                ListadoHoteles.addElement(rs.getString("NOMBRE"));
-              }           }
-          }
+        DefaultComboBoxModel<String> listadoHoteles = new DefaultComboBoxModel<>();
+        listadoHoteles.addElement("Seleccione");
+
+        try (Connection con = getConnection();
+             CallableStatement stmt = con.prepareCall("{call SP_OBTENER_HOTELES_DISPONIBLES(?)}")) {
+
+             stmt.registerOutParameter(1, OracleTypes.CURSOR);
+             stmt.execute();
+
+             ResultSet rs = (ResultSet) stmt.getObject(1);
+             while (rs.next()) {
+                 listadoHoteles.addElement(rs.getString("NOMBRE"));
+            }
         } catch (SQLException e) {
-            // Manejo de excepciones
             JOptionPane.showMessageDialog(null, e);
         }
-        return ListadoHoteles;
+    return listadoHoteles;
     }
-
-    //METODO LISTAR RESERVAS
 
   /**
-   *
+   * METODO LISTAR RESERVAS
    * @param consulta
    * @return
+   * Se eliminaron las variables sql y con innecesarias al utilizar los objetos directamente en el bloque try.
    */
     public static ResultSet ListarTabla(String consulta) {
-        Statement sql;
-        ResultSet rs = null;
-        Connection con = getConnection();
         try {
-            sql = con.createStatement();
-            rs = sql.executeQuery(consulta);
-        } catch (Exception e) {
+        Connection con = getConnection();
+        Statement sql = con.createStatement();
+        return sql.executeQuery(consulta);
+          } catch (SQLException e) {
             System.out.println(e);
         }
-        return rs;
+    return null;
     }
-    
-
-
 }

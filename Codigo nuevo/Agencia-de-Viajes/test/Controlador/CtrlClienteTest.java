@@ -38,7 +38,7 @@ public class CtrlClienteTest {
         BOTONModificar.setName("m");
         JButton BOTONEliminar= new JButton("Eliminar");
         BOTONEliminar.setName("e");
-        ResultSet rs = ConsultasCliente.ListarTabla("select * from CONSUL_CLIENTES");
+        ResultSet rs = ConsultasCliente.ListarTabla("select * from CLIENTE");
         md.setColumnIdentifiers(new Object[]{"Id", "Cedula", "Nombres", "Apellidos", "Telefono", "Direccion", "Email", "",""});
         try {
             while (rs.next()) {
@@ -50,4 +50,4 @@ public class CtrlClienteTest {
             System.out.println(e);
         }
     }
-}
+    }

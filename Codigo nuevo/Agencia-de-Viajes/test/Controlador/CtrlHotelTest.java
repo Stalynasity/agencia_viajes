@@ -45,7 +45,6 @@ public class CtrlHotelTest {
         BOTONModificar.setName("m");
         JButton BOTONEliminar= new JButton("Eliminar");
         BOTONEliminar.setName("e");
-
         ResultSet rs = ConsultasCliente.ListarTabla("select * from HOTEL ORDER BY IDHOTEL");
         md.setColumnIdentifiers(new Object[]{"ID", "Nombre", "Ubicacion", "Telefono", "Disponibilidad", "Servicios","",""});
         try {
