@@ -163,6 +163,7 @@ public class CtrlCliente implements ActionListener {
         BOTONModificar.setName("m");
         JButton BOTONEliminar = new JButton("Eliminar");
         BOTONEliminar.setName("e");
+        
         ResultSet rs = ConsultasCliente.ListarTabla("select * from CLIENTE");
         md.setColumnIdentifiers(new Object[]{"Id", "Cedula", "Nombres", "Apellidos", "Telefono", "Direccion", "Email", "", ""});
         try {

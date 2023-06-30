@@ -58,15 +58,18 @@ public class ConsultasHotel extends Conexion {
   /**
    * METODO LISTAR hotel
    * @param consulta
-   * @return null 
+   * @return 
+   * Se agregó un `return null` al final del método en caso de que se produzca una excepción,
+   * para evitar devolver un objeto `ResultSet` nulo en ese caso.
+   * al final del método en caso de que se produzca una excepción, para evitar devolver un objeto `ResultSet` nulo en ese caso.
    */
     public static ResultSet ListarTabla(String consulta){
         Connection con = getConnection();
         try {
-            Statement sql = con.createStatement();
-            return sql.executeQuery(consulta);
-        } catch (Exception e) {
-            System.out.println(e);
+              Statement sql = con.createStatement();
+              return sql.executeQuery(consulta);
+            } catch (Exception e) {
+        System.out.println(e);
         }
         return null;
     }

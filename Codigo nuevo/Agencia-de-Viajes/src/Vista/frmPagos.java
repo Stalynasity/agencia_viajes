@@ -213,27 +213,26 @@ public class frmPagos extends javax.swing.JFrame {
     private CtrlPagos p;
 
     private void tblReservasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblReservasMouseClicked
-        Reserva r = new Reserva();
-        ConsultasReservas modR = new ConsultasReservas();
+        Reserva reserva = new Reserva();
+        ConsultasReservas consultasReservas = new ConsultasReservas();
         frmModReservas frmMod = new frmModReservas();
-        Pagar pa = new Pagar();
+        Pagar pagar = new Pagar();
 
         int column = tblReservas.getColumnModel().getColumnIndexAtX(evt.getX());
         int row = evt.getY() / tblReservas.getRowHeight();
         if (row < tblReservas.getRowCount() && row >= 0 && column < tblReservas.getColumnCount() && column >= 0) {
             Object value = tblReservas.getValueAt(row, column);
             if (value instanceof JButton boton) {
-
                 if (boton.getName().equals("p")) {
-                    int seleccion = this.tblReservas.getSelectedRow();
-                    pa.lblmonto.setText(tblReservas.getValueAt(seleccion, 8).toString());
-                    pa.setVisible(true);
+                    int seleccion = tblReservas.getSelectedRow();
+                    pagar.lblmonto.setText(tblReservas.getValueAt(seleccion, 8).toString());
+                    pagar.setVisible(true);
                 }
                 if (boton.getName().equals("e")) {
-                    int fila = this.tblReservas.getSelectedRow();
+                    int fila = tblReservas.getSelectedRow();
                     String codigo = tblReservas.getValueAt(fila, 0).toString();
                     if (fila < 0) {
-                        JOptionPane.showMessageDialog(null, "Debe de seleccionar un registro de la tabla ", "AVISO", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Debe seleccionar un registro de la tabla", "AVISO", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         p.Listar();
                     }
@@ -253,27 +252,26 @@ public class frmPagos extends javax.swing.JFrame {
      * @param buscar
      */
     public void BuscarNuevo(String buscar) {
-        this.tblReservas.setDefaultRenderer(Object.class, new Render());
-        DefaultTableModel md = new DefaultTableModel() {
+        tblReservas.setDefaultRenderer(Object.class, new Render());
+        DefaultTableModel model = new DefaultTableModel() {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        this.tblReservas.setRowHeight(20);
-        JButton BOTONPagar = new JButton("Pagar");
-        BOTONPagar.setName("p");
+        tblReservas.setRowHeight(20);
+        JButton botonPagar = new JButton("Pagar");
+        botonPagar.setName("p");
 
         String sql = "";
-        buscar_box = (String) cb_buscar.getSelectedItem();
+        String buscarBox = (String) cb_buscar.getSelectedItem();
 
-        switch (buscar_box) {
+        switch (buscarBox) {
             case "Cedula" -> sql = "{call listar_reservas_pre_aprobadas_cedula(?, ?)}";
-
             case "Hotel" -> sql = "{call listar_reservas_pre_aprobadas_hotel(?, ?)}";
             default -> throw new AssertionError();
         }
 
-        md.setColumnIdentifiers(new Object[]{"IdReserva", "Cliente", "Cedula", "Hotel", "Habitaciones", "Personas", "Fecha Inicio", "Fecha Fin", "Precio Total", "Estado", "Boton"});
+        model.setColumnIdentifiers(new Object[]{"IdReserva", "Cliente", "Cedula", "Hotel", "Habitaciones", "Personas", "Fecha Inicio", "Fecha Fin", "Precio Total", "Estado", "Boton"});
         Connection con = getConnection();
         try {
             CallableStatement stmt = con.prepareCall(sql);
@@ -282,9 +280,9 @@ public class frmPagos extends javax.swing.JFrame {
             stmt.execute();
             ResultSet rs = (ResultSet) stmt.getObject(2);
             while (rs.next()) {
-                md.addRow(new Object[]{rs.getInt("IdReserva"), rs.getString("Cliente"), rs.getString("Cedula"), rs.getString("Hotel"),
-                    rs.getInt("Habitaciones"), rs.getInt("Personas"), rs.getDate("FechaInicio"), rs.getDate("FechaFin"), rs.getDouble("PrecioTotal"), rs.getString("Estado"), BOTONPagar});
-                this.tblReservas.setModel(md);
+                model.addRow(new Object[]{rs.getInt("IdReserva"), rs.getString("Cliente"), rs.getString("Cedula"), rs.getString("Hotel"),
+                    rs.getInt("Habitaciones"), rs.getInt("Personas"), rs.getDate("FechaInicio"), rs.getDate("FechaFin"), rs.getDouble("PrecioTotal"), rs.getString("Estado"), botonPagar});
+                tblReservas.setModel(model);
             }
         } catch (Exception e) {
             System.out.println(e);

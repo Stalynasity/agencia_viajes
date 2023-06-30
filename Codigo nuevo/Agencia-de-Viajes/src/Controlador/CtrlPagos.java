@@ -67,7 +67,6 @@ public class CtrlPagos implements ActionListener {
             System.out.println(e);
         }
     }
-
   /**
    *
    * @param e

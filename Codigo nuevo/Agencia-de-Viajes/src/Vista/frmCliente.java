@@ -60,7 +60,7 @@ public class frmCliente extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel6.setBackground(new java.awt.Color(0, 102, 102));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)), "Busqueda ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)), "Busqueda ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
 
         txtBusqueda.setBackground(new java.awt.Color(255, 255, 255));
         txtBusqueda.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
@@ -84,6 +84,11 @@ public class frmCliente extends javax.swing.JFrame {
         cb_buscar.setForeground(new java.awt.Color(0, 0, 0));
         cb_buscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Cedula", "Nombre", "Apellido", "Direccion" }));
         cb_buscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cb_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_buscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -418,6 +423,10 @@ public class frmCliente extends javax.swing.JFrame {
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
 
     }//GEN-LAST:event_txtEmailActionPerformed
+
+    private void cb_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_buscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cb_buscarActionPerformed
 
 //buscar solo con el txtfield sin usar boton
 

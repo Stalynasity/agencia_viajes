@@ -9,9 +9,6 @@ import java.sql.ResultSet;
  */
 public class ConsultasLogin {
 
-
-
-
    public boolean validarUsuario(String usuario, String clave) throws SQLException {
         CallableStatement ps = null;
         Connection con = getConnection();

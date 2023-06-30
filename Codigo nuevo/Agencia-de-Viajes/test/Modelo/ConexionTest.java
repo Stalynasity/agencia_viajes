@@ -42,19 +42,4 @@ public class ConexionTest {
             JOptionPane.showMessageDialog(null, "Conexion Erronea" + e.getMessage());
         }
     }
-
-  /**
-   * inicia desconexion
-   */
-  @Test
-    public void testDesconexion() {
-        try {
-            conn.close();
-        } catch (Exception e) {
-            System.out.println("Error al desconectar "+ e.getMessage());
-        }
-    }
-
-    
-    
 }

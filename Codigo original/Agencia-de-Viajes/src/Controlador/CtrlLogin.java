@@ -54,7 +54,6 @@ public class CtrlLogin implements ActionListener {
             } catch (SQLException ex) {
                 frml.mostrarMensaje("Error al conectar a la base de datos");
             }
-
         }
     }
        
